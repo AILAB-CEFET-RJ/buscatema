@@ -4,10 +4,18 @@ import pdfImg from '../images/pdf-upload.png'
 import '../styles/dropzone.css'
 
 export function DropZone(props) {
-    const onDrop = (acceptedFiles, fileRejections) => {
+    const onDrop = async (acceptedFiles, fileRejections) => {
         if(acceptedFiles.length > 0) {
-            console.log(props.oi)
+            const information = await sendPdf(acceptedFiles[0])
+            props.setInfo(information)
         }
+    }
+
+    const sendPdf = async (file) => {
+        const digit = Math.floor(Math.random() * 5)
+        const res = await fetch(`http://localhost:4000/res${digit}`)
+
+        return res.ok ? await res.json() : []
     }
 
     const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: {'application/pdf': ['.pdf']}, multiple: false, onDrop})
@@ -24,7 +32,7 @@ export function DropZone(props) {
         {
         isDragActive ?
             <p>Solte o pdf aqui...</p> :
-            <p>Arraste o pdf até aqui ou <span style={{textDecoration: 'underline', cursor: 'pointer'}}>clique para selecionar</span></p>
+            <p>Arraste o pdf até aqui ou <span className='dropzone__clique'>clique para selecionar</span></p>
         }
     </div>
     )

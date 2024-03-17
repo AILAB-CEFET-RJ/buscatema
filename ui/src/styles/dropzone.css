@@ -17,3 +17,8 @@
 .dropzone__pdf_img {
     width: 5rem;
 }
+
+.dropzone__clique {
+    cursor: pointer;
+    text-decoration: underline;
+}
