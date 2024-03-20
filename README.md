@@ -13,5 +13,5 @@ Ferramenta para busca de temas associados a um recurso especial
 4. Inicializar o projeto `npm start`
 
 5. Verificar no terminal o link gerado para acessar o sistema localmente
-   
-6. Para inicializar o json-server, acessar outro terminal e acessar a pasta ui `cd ui`. Posteriormente executar o comando `npx json-server -p 4000  .\src\db.json`
+
+6. Para inicializar o json-server, acessar outro terminal e acessar a pasta ui `cd ui`. Posteriormente executar o comando `npm run start:server`
