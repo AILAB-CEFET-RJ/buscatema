@@ -6,19 +6,24 @@
     flex-direction: column;
     gap: 1rem;
     justify-content: center;
-    margin: auto;
-    max-width: 500px;
+    width: 350px;
     min-height: 10vh;
-    padding: 2rem;
+    padding: 1rem;
     transition: .4s;
     user-select: none;
 }
 
 .dropzone__pdf_img {
-    width: 5rem;
+    width: 3rem;
 }
 
 .dropzone__clique {
     cursor: pointer;
     text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+    .dropzone {
+        width: 100%;
+    }
 }

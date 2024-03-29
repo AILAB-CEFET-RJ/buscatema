@@ -19,3 +19,7 @@ code {
 img {
   pointer-events: none;
 }
+
+strong {
+  font-weight: bold;
+}

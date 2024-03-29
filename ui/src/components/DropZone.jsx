@@ -3,36 +3,43 @@ import { useDropzone } from 'react-dropzone'
 import pdfImg from '../images/pdf-upload.png'
 import '../styles/dropzone.css'
 
-export function DropZone(props) {
+export function DropZone({ files, setFiles, acceptType, fileType }) {
     const onDrop = async (acceptedFiles, fileRejections) => {
         if(acceptedFiles.length > 0) {
-            const information = await sendPdf(acceptedFiles[0])
-            props.setInfo(information)
+            let _files = {...files}
+            _files[fileType] = acceptedFiles[0]
+
+            setFiles(_files)
         }
     }
 
-    const sendPdf = async (file) => {
-        const digit = Math.floor(Math.random() * 5)
-        const res = await fetch(`http://localhost:4000/res${digit}`)
-
-        return res.ok ? await res.json() : []
-    }
-
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: {'application/pdf': ['.pdf']}, multiple: false, onDrop})
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({
+        accept: acceptType, 
+        multiple: false, 
+        disabled: Boolean(files[fileType]), 
+        onDrop
+    })
     
-    const dragStyle = {
+    const dinamicStyle = files[fileType] ? 
+    {
+        border: `2px solid #555`,
+        backgroundColor: '#fff' 
+    } :
+    {
         border: `2px dashed ${isDragActive ? '#3385ff' : '#555'}`,
         backgroundColor: isDragActive ? '#3385ff17' : '#fff'
     }
 
     return (
-    <div className='dropzone' style={dragStyle} {...getRootProps()}>
+    <div className='dropzone' style={dinamicStyle} {...getRootProps()}>
         <input {...getInputProps()} />
-        <img className='dropzone__pdf_img' src={pdfImg} alt="ícone de um arquivo pdf" />
+        {/* <img className='dropzone__pdf_img' src={pdfImg} alt="ícone de um arquivo pdf" /> */}
         {
+        files[fileType] ?
+        <p><strong>{files[fileType].name}</strong></p> :
         isDragActive ?
-            <p>Solte o pdf aqui...</p> :
-            <p>Arraste o pdf até aqui ou <span className='dropzone__clique'>clique para selecionar</span></p>
+            <p>Solte o {fileType} aqui...</p> :
+            <p>Arraste o <strong>{fileType}</strong> até aqui ou <span className='dropzone__clique'>clique para selecionar</span></p>
         }
     </div>
     )

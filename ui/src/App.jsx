@@ -1,22 +1,27 @@
 import Container from '@mui/material/Container'
-import { DropZone } from './components/DropZone'
+import { UploadZone } from './components/UploadZone'
 import { ThemeCard } from './components/ThemeCard'
-import { useState } from 'react'
+import './styles/dropzone.css'
+import { createContext, useState } from 'react'
 
-function App() {
-  const [info, setInfo] = useState([]);
+export const InfoContext = createContext()
 
-  return (
-    <Container maxWidth="lg" sx={{ p: 5 }}>
-      <DropZone setInfo={setInfo} />
+export default function App() {
+    const [info, setInfo] = useState([])
 
-      <div style={{ marginTop: '32px' }}>
-        {info.length > 0
-          ? info.map((item) => <ThemeCard key={item.id} themeId={item.id} text={item.content}/>)
-          : ''}
-      </div>
-    </Container>
-  )
+    return (
+    <InfoContext.Provider value={setInfo}>
+        <Container maxWidth="lg" sx={{ p: 5 }}>
+            <UploadZone/>
+
+            <hr style={{border: '1px solid #ddd', margin: '2rem 0 4rem 0'}}/>
+
+            <div style={{ marginTop: '32px' }}>
+                {info.length > 0
+                ? info.map((item) => <ThemeCard key={item.id} themeId={item.id} text={item.content}/>)
+                : ''}
+            </div>
+        </Container>
+    </InfoContext.Provider>
+    )
 }
-
-export default App
