@@ -9,8 +9,13 @@ export const InfoContext = createContext()
 export default function App() {
     const [info, setInfo] = useState([])
 
+    const setOrderedInfo = (info) => { 
+        const orderedInfo = info.sort((a, b) => b.likeliness - a.likeliness)
+        setInfo(orderedInfo);
+    };
+
     return (
-    <InfoContext.Provider value={setInfo}>
+    <InfoContext.Provider value={setOrderedInfo}>
         <Container maxWidth="lg" sx={{ p: 5 }}>
             <UploadZone/>
 
@@ -18,7 +23,7 @@ export default function App() {
 
             <div style={{ marginTop: '32px' }}>
                 {info.length > 0
-                ? info.map((item) => <ThemeCard key={item.id} themeId={item.id} text={item.content}/>)
+                ? info.map((item) => <ThemeCard key={item.id} themeId={item.id} text={item.content} likeliness={item.likeliness}/>)
                 : ''}
             </div>
         </Container>

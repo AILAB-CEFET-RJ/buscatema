@@ -30,7 +30,7 @@ export function UploadZone() {
 
     const button = filesUploaded >=2 ? 
     <Button variant="contained" onClick={sendFiles}>
-        enviar
+        Enviar
     </Button> :
     <Button variant="contained" disabled>
         Arquivos inseridos ({filesUploaded} de 2)
