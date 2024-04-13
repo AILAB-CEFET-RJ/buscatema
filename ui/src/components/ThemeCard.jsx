@@ -30,7 +30,50 @@ const Text = styled(Typography)`
   color: #AEAEAE;
 `;
 
-export function ThemeCard({ themeId, text }) {
+const ProbabilityDisplay = styled.div`
+  display: flex;
+  gap: 8px;
+  opacity: 75%;
+
+  margin-top: 16px;
+  font-weight: 700;
+`
+
+const ThemeProbability = styled.span`
+  &.very-unlikely {
+    color: #f77e6e;
+  }
+  &.unlikely {
+    color: #f0c743;
+  }
+  &.likely {
+    color: #1cd47e;
+  }
+  &.very-likely {
+    color: #17f117;
+  } 
+`;
+
+function renderProbability(value) {
+  const assignRules = [
+    [[0, 30], 'very-unlikely'],
+    [[40, 55], 'unlikely'],
+    [[55, 75], 'likely'],
+    [[75, 100.01], 'very-likely'],
+  ];
+
+  const themeProbabilityClass = assignRules.find((v) => {
+    const min = v[0][0];
+    const max = v[0][1];
+    return min <= value && max > value;
+  })
+
+  return <ThemeProbability className={themeProbabilityClass[1]}>
+    {value}%
+  </ThemeProbability>;
+}
+
+export function ThemeCard({ themeId, text, likeliness=0 }) {
   return (
     <StyledCard>
       <ThemeID>
@@ -38,6 +81,10 @@ export function ThemeCard({ themeId, text }) {
         <NumberID>{themeId}</NumberID>
       </ThemeID>
       <Text>{text}</Text>
+      <ProbabilityDisplay>
+        <span>Probabilidade:</span>
+        {renderProbability(likeliness)}
+      </ProbabilityDisplay>
     </StyledCard>
   );
 }

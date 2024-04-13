@@ -33,7 +33,6 @@ export function DropZone({ files, setFiles, acceptType, fileType }) {
     return (
     <div className='dropzone' style={dinamicStyle} {...getRootProps()}>
         <input {...getInputProps()} />
-        {/* <img className='dropzone__pdf_img' src={pdfImg} alt="ícone de um arquivo pdf" /> */}
         {
         files[fileType] ?
         <p><strong>{files[fileType].name}</strong></p> :
