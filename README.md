@@ -15,3 +15,12 @@ Ferramenta para busca de temas associados a um recurso especial
 5. Verificar no terminal o link gerado para acessar o sistema localmente
 
 6. Para inicializar o json-server, acessar outro terminal e acessar a pasta ui `cd ui`. Posteriormente executar o comando `npm run start:server`
+
+## Para inicializar o backend
+
+1. Acessar a pasta backend
+   `cd backend`
+
+2. Verificar se possui Python instalado
+
+3. Para inicializar, introduza o comando python app.py no terminal
