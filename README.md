@@ -21,6 +21,6 @@ Ferramenta para busca de temas associados a um recurso especial
 1. Acessar a pasta backend
    `cd backend`
 
-2. Verificar se possui Python instalado
+2. Verificar se possui o [python](https://www.python.org/) instalado
 
-3. Para inicializar, introduza o comando python app.py no terminal
+3. Para inicializar, introduza o comando `python app.py` no terminal
