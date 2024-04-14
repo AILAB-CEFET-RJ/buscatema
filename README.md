@@ -8,9 +8,9 @@ Ferramenta para busca de temas associados a um recurso especial
 2. Acessar a pasta ui
    `cd ui`
 
-3. Se for a primeira vez, instalar os módulos da interface `npm i`
+3. Instalar os módulos necessários `npm i`
 
-4. Inicializar o projeto `npm start`
+4. Inicializar a interface `npm start`
 
 5. Verificar no terminal o link gerado para acessar o sistema localmente
 
@@ -18,9 +18,11 @@ Ferramenta para busca de temas associados a um recurso especial
 
 ## Para inicializar o backend
 
+1. Instalar o [python](https://www.python.org/) caso não possua
+
 1. Acessar a pasta backend
    `cd backend`
 
-2. Verificar se possui o [python](https://www.python.org/) instalado
+2. Instalar os módulos necessários `pip install -r requirements.txt`
 
-3. Para inicializar, introduza o comando `python app.py` no terminal
+3. Inicializar o backend `py app.py`
