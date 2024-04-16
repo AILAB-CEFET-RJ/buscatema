@@ -34,10 +34,6 @@ def upload_file():
         csv_path = os.path.join(app.config['UPLOAD_FOLDER'], csv_filename)
         pdf_file.save(pdf_path)
         csv_file.save(csv_path)
-
-        # Aqui você pode realizar qualquer processamento necessário nos arquivos
-        # Por exemplo, ler o texto do PDF e CSV
-
         # Retornar uma resposta ao frontend
         return jsonify({'message': 'Arquivos recebidos com sucesso',
                         'pdf_filename': pdf_filename,
