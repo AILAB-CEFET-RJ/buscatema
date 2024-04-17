@@ -37,9 +37,10 @@ def upload_file():
         pdf_file.save(pdf_path)
         csv_file.save(csv_path)
         # Retornar uma resposta ao frontend
-        return jsonify({'message': 'Arquivos recebidos com sucesso',
+        data = [{'message': 'Arquivos recebidos com sucesso',
                         'pdf_filename': pdf_filename,
-                        'csv_filename': csv_filename}), 200
+                        'csv_filename': csv_filename}]
+        return jsonify(data), 200
     else:
         return jsonify({'error': 'Tipos de arquivo não permitidos'}), 400
 
