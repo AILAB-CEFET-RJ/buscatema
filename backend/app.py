@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import os
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -37,9 +38,14 @@ def upload_file():
         pdf_file.save(pdf_path)
         csv_file.save(csv_path)
         # Retornar uma resposta ao frontend
-        return jsonify({'message': 'Arquivos recebidos com sucesso',
-                        'pdf_filename': pdf_filename,
-                        'csv_filename': csv_filename}), 200
+        data = [
+            {
+                "content": "Definir se é possível ao magistrado fixar critérios objetivos para a análise, na forma do art. 99, §2º, do CPC, dos pressupostos necessários à concessão de justiça gratuita, ou se o exame deve ser feito com base no cotejo dos elementos concretos trazidos aos autos; E, caso seja possível a utilização de critérios objetivos no exame da hipossuficiência, se a Resolução nº 85/2014 do Conselho Superior da Defensoria Pública da União, que adota a renda mensal de 03 salários mínimos como limite máximo apto a gerar presunção de pessoa economicamente necessitada, é parâmetro idôneo a ser utilizado.",
+                "id": 7,
+                "likeliness": 70
+            }
+        ]
+        return json.dumps(data), 200
     else:
         return jsonify({'error': 'Tipos de arquivo não permitidos'}), 400
 
