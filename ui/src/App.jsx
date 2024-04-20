@@ -3,6 +3,9 @@ import { UploadZone } from './components/UploadZone'
 import { ThemeCard } from './components/ThemeCard'
 import './styles/dropzone.css'
 import { createContext, useState } from 'react'
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 
 export const InfoContext = createContext()
 
@@ -16,6 +19,14 @@ export default function App() {
 
     return (
     <InfoContext.Provider value={setOrderedInfo}>
+        <AppBar position="static">
+            <Toolbar>
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                FindTema
+                </Typography>
+            </Toolbar>
+        </AppBar>
+
         <Container maxWidth="lg" sx={{ p: 5 }}>
             <UploadZone/>
 
