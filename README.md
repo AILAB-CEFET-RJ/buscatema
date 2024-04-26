@@ -20,24 +20,45 @@ Dois servidores são utilizados: o primeiro gerencia os pedidos para análise e 
 
 ![Diagrama de Atividades](docs/activity_diagram.png)
 
-## Para inicializar a interface
+## Tecnologias Envolvidas
+A aplicação consiste em duas partes: uma Single-Page Application \(SPA\) escrita em [React](https://react.dev/), um framework [javascript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript), e um servidor intermediário, em [Flask](https://flask.palletsprojects.com/en/3.0.x/), uma biblioteca [python](https://www.python.org/). O processamento referente a casos judiciais acontece em um terceiro módulo, que ainda não faz parte desse repositório.
 
-1. Instalar o [nodejs](https://nodejs.org/en) caso não possua
+No momento, o servidor intermediário armazena os arquivos enviados pelo usuário e envia uma resposta _hard-coded_. A aplicação que de fato processa os documentos está sendo refinada e a integração está prevista para acontecer em breve. A ideia, no entanto, é manter as interfaces para que não sejam necessárias modificações adicionais.
 
-2. Acessar a pasta ui
+Devem ser utilizadas as versões mais recentes do Node.JS e Python que tenham suporte ativo.
+
+## Instalação e Execução da Interface (para o Manual de Desenvolvedor)
+
+O desenvolvedor deverá seguir as etapas abaixo para executar o front-end em sua máquina. Os passos foram descritos considerando um sistema baseado em Unix 03:
+
+1. Clonar e acessar este repositório:<br>
+   `git clone https://github.com/MLRG-CEFET-RJ/buscatema`<br>
+   `cd buscatema`
+
+2. Instalar o [Node.js](https://nodejs.org/en) caso não o possua. **Recomenda-se a última versão LTS**
+
+2. Acessar a pasta ui:<br>
    `cd ui`
 
-3. Instalar os módulos necessários `npm i`
+3. Instalar os módulos necessários:<br>
+   `npm i`
 
-4. Inicializar a interface `npm start`
+4. Inicializar a interface:<br>
+   `npm start`
 
-## Para inicializar o backend
+É importante que o back-end esteja em execução na porta 5000 para que a resposta da requisição seja corretamente recebida. 
+
+## Instalação e Execução do Back-end (para o Manual de Desenvolvedor)
+
+O desenvolvedor deverá seguir as etapas abaixo para executar o back-end em sua máquina. Os passos foram descritos considerando um sistema baseado em Unix 03:
 
 1. Instalar o [python](https://www.python.org/) caso não possua
 
-2. Acessar a pasta backend
+2. Acessar a pasta backend:<br>
    `cd backend`
 
-3. Instalar os módulos necessários `pip install -r requirements.txt`
+3. Instalar os módulos necessários:<br>
+   `pip install -r requirements.txt`
 
-4. Inicializar o backend `py app.py`
+4. Inicializar o backend:<br>
+   `py app.py`
