@@ -22,7 +22,8 @@ O analista judiciário anexa uma lista de temas e um arquivo do caso; o BuscaTem
 
 ![Diagrama de Casos de Uso da Aplicação](docs/use_case_diagram.jpg)
 
-Em versões futuras, a ferramenta permitirá o acompanhamento do processo de análise por parte do analista.
+Em versões futuras, a ferramenta permitirá o acompanhamento do processo de análise por parte do analista e o envio de imagens do processo para posterior leitura OCR. 
+<!-- A aplicação também poderá ser integrada a um sistema de gerenciamento de processos judiciais, como o e-SAJ, para facilitar a busca de temas e automatizar o processo de análise. -->
 
 ## Como o sistema está organizado?
 Dois servidores são utilizados: o primeiro gerencia os pedidos para análise e o segundo é de fato o responsável pelo processamento computacional.
@@ -35,6 +36,37 @@ A aplicação consiste em duas partes: uma Single-Page Application \(SPA\) escri
 No momento, o servidor intermediário armazena os arquivos enviados pelo usuário e envia uma resposta _hard-coded_. A aplicação que de fato processa os documentos está sendo refinada e a integração está prevista para acontecer em breve. A ideia, no entanto, é manter as interfaces para que não sejam necessárias modificações adicionais.
 
 Devem ser utilizadas as versões mais recentes do Node.JS e Python que tenham suporte ativo.
+
+A aplicação consiste em duas partes principais: uma Single-Page Application \(SPA\) escrita em [React](https://react.dev/), um framework [javascript](https://developer.mozilla.org/pt-BR/docs/Web/JavaScript) para a construção de interfaces de usuário, e um backend implementado em [Flask](https://flask.palletsprojects.com/en/3.0.x/), uma biblioteca [python](https://www.python.org/). O backend recebe dois arquivos CSV contendo casos judiciais e uma lista de temas, realiza o processamento dos dados e gera sugestões de temas relevantes para cada caso. O frontend, por sua vez, exibe essas sugestões ao usuário.
+
+O backend Flask, neste momento, desempenha as seguintes funções:
+
+1. **Recebimento de Arquivos:** Ele recebe os arquivos CSV enviados pelo usuário através do frontend React, sendo um contendo casos judiciais e outro contendo uma lista de temas.
+2. **Validação e Armazenamento:** Realiza a validação dos arquivos recebidos (verificando se são do tipo CSV e se possuem conteúdo) e os armazena no sistema de arquivos local.
+3. **Comunicação com o Módulo de Processamento:** Executa o script `sugereTema.py`, passando os arquivos como argumentos.
+4. **Resposta ao Frontend:** Após a execução do script de processamento, o backend envia uma resposta ao frontend, indicando sucesso ou falha na operação.
+
+O frontend React é responsável por:
+
+1. **Interface de Upload:** Fornece uma interface para o usuário fazer o upload dos arquivos
+2. **Envio dos Arquivos:** Utiliza uma requisição POST para enviar os arquivos para o endpoint do backend Flask.
+3. **Exibição de Sugestões:** Após o processamento no backend, recebe e exibe as sugestões de temas na interface do usuário, ordenadas por relevância.
+4. **Tratamento de Tempo Limite:** Se o processamento no backend exceder o tempo limite de 80 segundos, exibe um texto pré-definido contendo um exemplo de sugestões de temas.
+
+O script `sugereTema.py`, por sua vez, executa as seguintes etapas principais:
+
+1. **Pré-processamento dos Dados:**
+   - Lê os arquivos 1 (casos judiciais) e 2 (lista de temas).
+   - Realiza a limpeza e pré-processamento dos textos, removendo pontuações, stop words e outros elementos irrelevantes.
+   - Aplica técnicas de processamento de linguagem natural (PLN) para preparar os dados para a próxima etapa.
+2. **Geração de Embeddings:**
+   - Utiliza um modelo de Sentence-BERT pré-treinado para gerar embeddings (representações vetoriais) dos textos dos casos judiciais e dos temas.
+   - Esses embeddings capturam o significado semântico dos textos, permitindo a comparação e identificação de similaridades entre eles.
+3. **Criação de Resumos:**
+   - Executa o script `createTopics.py` para criar resumos dos casos judiciais, utilizando uma estratégia baseada em LexRank guiada por uma lista de temas e com um limite de 15 sentenças.
+4. **Cálculo de Similaridade:**
+   - Executa o script `calcSimilarity.py` para calcular a similaridade entre os resumos dos casos judiciais e os temas, utilizando o algoritmo BM25.
+   - Gera um arquivo CSV (`CLASSIFIED_TOPICS_X15CLEAN_BM25.csv`) contendo os temas sugeridos para cada caso judicial, classificados por ordem de relevância.
 
 ## Manual do Usuário
 Com a interface gráfica e o servidor do BuscaTema já em funcionamento, você deve enviar o arquivo do caso e a lista de temas que será utilizada pela aplicação.
@@ -91,3 +123,6 @@ O desenvolvedor deverá seguir as etapas abaixo para executar o back-end em sua 
    `source busca-env/bin/activate`
 
 7. Seguir normalmente do passo 2 ao passo 4
+
+## Próximos Passos (Documento de Trabalho Futuro)
+Ainda falta, para os próximos semestres, a implementação de um módulo de autenticação e persistência, garantindo que o processamento de dados aconteça após a requisição e que o usuário não precise aguardar o tempo todo. A autenticação garantiria um acesso posterior aos resultados pelo usuário, que poderia ser notificado por um sistema de mensagens.
