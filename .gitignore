@@ -183,4 +183,8 @@ ui/npm-debug.log*
 ui/yarn-debug.log*
 ui/yarn-error.log*
 
-backend/uploads
+*.pkl
+!lista_temas_EMBEDDING_CLEAN.pkl
+!TOPICS_X15CLEAN.pkl
+
+api/*.csv
