@@ -187,4 +187,6 @@ ui/yarn-error.log*
 !lista_temas_EMBEDDING_CLEAN.pkl
 !TOPICS_X15CLEAN.pkl
 
+api/*.pdf
 api/*.csv
+!lista_temas.csv

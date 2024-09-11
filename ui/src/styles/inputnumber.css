@@ -1,0 +1,10 @@
+.inputnumber {
+    outline: 0;
+    padding: .5rem;
+    transition: .4s;
+}
+
+.inputnumber::-webkit-outer-spin-button,
+.inputnumber::-webkit-inner-spin-button {
+   -webkit-appearance: none;
+}

@@ -1,26 +1,25 @@
 import React from 'react'
 import { useDropzone } from 'react-dropzone'
-import pdfImg from '../images/pdf-upload.png'
 import '../styles/dropzone.css'
 
-export function DropZone({ files, setFiles, acceptType, fileType }) {
-    const onDrop = async (acceptedFiles, fileRejections) => {
-        if(acceptedFiles.length > 0) {
-            let _files = {...files}
-            _files[fileType] = acceptedFiles[0]
+export function DropZone({ request, setRequest, acceptType, fileType }) {
+    const onDrop = async (acceptedRequest, fileRejections) => {
+        if(acceptedRequest.length > 0) {
+            let _request = {...request}
+            _request[fileType] = acceptedRequest[0]
 
-            setFiles(_files)
+            setRequest(_request)
         }
     }
 
     const {getRootProps, getInputProps, isDragActive} = useDropzone({
         accept: acceptType, 
         multiple: false, 
-        disabled: Boolean(files[fileType]), 
+        disabled: Boolean(request[fileType]), 
         onDrop
     })
     
-    const dinamicStyle = files[fileType] ? 
+    const dinamicStyle = request[fileType] ? 
     {
         border: `2px solid #555`,
         backgroundColor: '#fff' 
@@ -34,8 +33,8 @@ export function DropZone({ files, setFiles, acceptType, fileType }) {
     <div className='dropzone' style={dinamicStyle} {...getRootProps()}>
         <input {...getInputProps()} />
         {
-        files[fileType] ?
-        <p><strong>{files[fileType].name}</strong></p> :
+        request[fileType] ?
+        <p><strong>{request[fileType].name}</strong></p> :
         isDragActive ?
             <p>Solte o {fileType} aqui...</p> :
             <p>Arraste o <strong>{fileType}</strong> até aqui ou <span className='dropzone__clique'>clique para selecionar</span></p>

@@ -12,6 +12,7 @@ import nltk
 from LexRank2 import degree_centrality_scores
 import string
 from rank_bm25 import BM25Okapi
+from app import update_progress
 
 
 # Instalação dos pacotes necessários
@@ -320,6 +321,9 @@ class Contexto:
         self.estrategia.executar(corpus_embedding, size, model, seed_list, verbose)
 
 def main(args):
+    global progress
+
+    update_progress(30)
     print("############### PROGRAMA DE GERAÇÃO DE TÓPICOS ###############")
     print("############### Configuração ###############")
     print(f"Topic generation type : {args.type}")
@@ -339,8 +343,10 @@ def main(args):
     else:
         print(f"Tipo de geração de tópicos não reconhecido: {args.type}")
         return
+    update_progress(50)
     contexto = Contexto(estrategia)
     contexto.executarEstrategia(args.corpus_embedding,int(args.size), args.model, args.seed_list,verbose)
+    update_progress(60)
 
     print("Salvando log ...")
     tempo_fim = time.time()

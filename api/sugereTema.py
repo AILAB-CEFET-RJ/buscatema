@@ -19,6 +19,7 @@ import string
 import torch
 import subprocess
 import time
+from app import update_progress
 
 verbose = False
 
@@ -152,6 +153,8 @@ def create_embedding(file,indice,corpus,num,model,data_type):
     return nameEmbedding
     
 def main(args):
+    global progress
+
     inicio = time.time()
     conteudo = []
     print("############### PROGRAMA DE SUGESTÃO DE TEMAS ###############")
@@ -182,17 +185,18 @@ def main(args):
     #arquivo_embedding_tema = create_embedding(args.themes_file,corpus_tema['indice'],conteudo_tema,corpus_tema['num_tema_cadastrado'],args.model,'tema')
     
     print("############### Criação do Resumo ###############")
-    
+    update_progress(20)
     #Executa script de criação de resumo do recurso especial - estratégia lexrank guiada 15 sentenças
     comando = f"python createTopics.py {arquivo_embedding_recurso} 15 X -v --seed_list lista_temas.csv"
     subprocess.run(comando, shell=True)
+    update_progress(70)
     
     print("############### Calculo de similaridade ###############")
     
     #Executa script pra calcular similaridade entre resumo do recurso e temas usando BM25, 6 sugestoes
     comando_similaridade = "python calcSimilarity.py TOPICS_X15CLEAN.pkl lista_temas_EMBEDDING_CLEAN.pkl 6 B"
     subprocess.run(comando_similaridade, shell=True)
-    
+    update_progress(80)
     print("Resultado salvo no arquivo CLASSFIED_TOPICS_X15CLEAN_BM25.csv")
     fim = time.time()
     tempo_total = fim - inicio
@@ -200,7 +204,7 @@ def main(args):
     print(f"Tempo de execução: {tempo_total} segundos")
     
 if __name__=="__main__":
-    
+
     parser = argparse.ArgumentParser(description='Generate text embedding using Sentence-BERT model')
     parser.add_argument('appeal_file', type=argparse.FileType('r'), help='File containing the appeal')
     parser.add_argument('themes_file', type=argparse.FileType('r'), help='File containing the themes')

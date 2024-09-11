@@ -1,51 +1,83 @@
 import Button from '@mui/material/Button'
 import { DropZone } from './DropZone'
 import { useContext, useState } from 'react'
-import { InfoContext } from '../App'
+import { GlobalContext } from '../App'
 import '../styles/uploadzone.css'
+import '../styles/inputnumber.css'
 
 export function UploadZone() {
-    const [files, setFiles] = useState({
-        csv1: '',  // Alterado para 'csv1'
-        csv2: ''   // Alterado para 'csv2'
+    const [request, setRequest] = useState({
+        pdf: null,
+        num_tema: null
     })
 
-    const setInfo = useContext(InfoContext)
+    const { setResult, setLoading, progress, setProgress } = useContext(GlobalContext)
 
-    const filesUploaded = Object.values(files).reduce((prev, curr) => {
-        return prev + (curr instanceof File ? 1 : 0)
-    }, 0)
+    const enabled = request.pdf && request.pdf instanceof File &&
+                    request.num_tema && Number(request.num_tema) && 
+                    request.num_tema > 0
 
-    const sendFiles = async () => {
+    const getUploadProgress = () => {
+        fetch('http://localhost:5000/upload/progress')
+        .then(res => res.json())
+        .then(json => {
+            if(json.progress < 100) {
+                setProgress(json.progress)
+                setTimeout(() => {
+                    getUploadProgress()
+                }, 2000)
+            }
+        })
+    }
+
+    const sendRequest = async () => {
+        setLoading(true)
+        setResult([])
+        document.querySelector('#num_tema').value = ''
+
         const formData = new FormData()
-        formData.append('csv1', files.csv1)  // Usando a chave 'csv1'
-        formData.append('csv2', files.csv2)  // Usando a chave 'csv2'
+        formData.append('pdf', request.pdf)
+        formData.append('num_tema', request.num_tema)
+
+        setRequest({ pdf: null, num_tema: null })
+
+        setTimeout(() => {
+            getUploadProgress()
+        }, 2000);
 
         const res = await fetch(`http://localhost:5000/upload`, {
             method: 'POST',
             body: formData
         })
-        
-        setInfo(res.ok ? await res.json() : [])
-        setFiles({ csv1: '', csv2: '' })  // Resetando para as novas chaves
-    }
 
-    const button = filesUploaded >= 2 ? 
-    <Button variant="contained" onClick={sendFiles}>
-        enviar
-    </Button> :
-    <Button variant="contained" disabled>
-        Arquivos inseridos ({filesUploaded} de 2)
-    </Button>
+        let result = []
+        const json = res.ok ? await res.json() : []
+
+        if(json.hasOwnProperty('result'))
+            result = json.result.sort((tema1, tema2) => tema2.similaridade - tema1.similaridade)
+        
+        setLoading(false)
+        setResult(result)
+    }
 
     return (
     <div className='uploadzone'>
         <div className="uploadzone__dropzones">
-            <DropZone files={files} setFiles={setFiles} acceptType={{'text/csv': ['.csv']}} fileType={'csv1'}/>  {/* Alterado para 'csv1' */}
-            <DropZone files={files} setFiles={setFiles} acceptType={{'text/csv': ['.csv']}} fileType={'csv2'}/>  {/* Alterado para 'csv2' */}
+            <DropZone request={request} setRequest={setRequest} acceptType={{'text/pdf': ['.pdf']}} fileType={'pdf'}/>
         </div>
 
-        {button}
+        <input id="num_tema" type="number" placeholder='Número do tema' 
+                className='inputnumber' min='0'
+                onKeyUp={e => {
+                    const value = e.target.value
+                    const _request = {...request}
+                    _request.num_tema = value
+                    setRequest(_request)
+                }}/>
+
+        <Button variant="contained" onClick={sendRequest} disabled={!enabled}>
+            enviar
+        </Button>
     </div>
     )
 }
